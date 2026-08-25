@@ -1,0 +1,6 @@
+@Tp_Api_PettaFederico_HostAddress = http://localhost:5207
+
+GET {{Tp_Api_PettaFederico_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
