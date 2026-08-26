@@ -25,18 +25,7 @@ public class MascotaController : ControllerBase
     [HttpGet]
     public IActionResult Get()
     {
-        foreach(Mascota m in mascotas)
-        {
-            if(m is Perro)
-            {
-                return Ok((Perro)m);
-            }
-            if(m is Gato)
-            {
-                return Ok((Gato)m);
-            }
-        }
-        return NotFound("Mascota no encontrada");
+        return Ok(mascotas);
     }
 
     [HttpGet("{id}")]
@@ -112,29 +101,40 @@ public class MascotaController : ControllerBase
         return Ok("Gato creado exitosamente");
     }
 
-    [HttpPut("{id}")]
-    public IActionResult Update(int id, [FromBody]Mascota mascotaActualizada)
+    [HttpPut("perro/{id}")]
+    public IActionResult UpdatePerro(int id, [FromBody] Perro perroActualizado)
     {
-        foreach(Mascota m in mascotas)
+        foreach (Mascota m in mascotas)
         {
-            if(m.Id == id)
+            if (m.Id == id && m is Perro perro)
             {
-                m.Nombre = mascotaActualizada.Nombre;
-                m.Edad = mascotaActualizada.Edad;
+                perro.Nombre = perroActualizado.Nombre;
+                perro.Edad = perroActualizado.Edad;
+                perro.Raza = perroActualizado.Raza;
 
-                if(m is Perro)
-                {
-                    ((Perro)m).Raza = ((Perro)mascotaActualizada).Raza;
-                }
-                else if(m is Gato)
-                {
-                    ((Gato)m).Color = ((Gato)mascotaActualizada).Color;
-                }
-
-                return Ok("Mascota actualizada exitosamente");
+                return Ok("Perro actualizado exitosamente");
             }
         }
-        return NotFound("Mascota no encontrada");
+
+        return NotFound("Perro no encontrado");
+    }
+
+    [HttpPut("gato/{id}")]
+    public IActionResult UpdateGato(int id, [FromBody] Gato gatoActualizado)
+    {
+        foreach (Mascota m in mascotas)
+        {
+            if (m.Id == id && m is Gato gato)
+            {
+                gato.Nombre = gatoActualizado.Nombre;
+                gato.Edad = gatoActualizado.Edad;
+                gato.Color = gatoActualizado.Color;
+
+                return Ok("Gato actualizado exitosamente");
+            }
+        }
+
+        return NotFound("Gato no encontrado");
     }
 
     [HttpDelete("{id}")]
